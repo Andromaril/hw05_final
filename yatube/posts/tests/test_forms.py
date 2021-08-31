@@ -64,7 +64,7 @@ class TaskCreateFormTests(TestCase):
                          form_data.get('text'))
         self.assertEqual(response.context.get('page_obj')[1].group, self.group)
 
-        self.assertIn("<img", response.content.decode()) 
+        self.assertIn("<img", response.content.decode())
 
         self.assertEqual(Post.objects.count(), 2)
         self.assertRedirects(
@@ -87,7 +87,6 @@ class TaskCreateFormTests(TestCase):
 
         self.assertEqual(response.context.get('comment')[1].text,
                          form_data.get('text'))
-   
 
         self.assertEqual(Comment.objects.count(), 2)
         self.assertRedirects(
