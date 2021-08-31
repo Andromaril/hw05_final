@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block title %}Об авторе проекта{% endblock %}
+{% block content %}
+<h1>Привет, я автор учебного проекта yatube!</h1>
+  <center><p><img src="/media/4040432bf31f8d9f805cc5a745cc5164.jpg" width="477" height="292" align="center" border="3" /></p></center>
+<a class="nav-link" href="{% url 'posts:index' %}">
+  На главную страницу сайта
+</a>
+{% endblock %} 
