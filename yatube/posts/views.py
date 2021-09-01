@@ -6,7 +6,6 @@ from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 
 from posts.forms import CommentForm, PostForm
-
 from .models import Comment, Follow, Group, Post
 
 User = get_user_model()
@@ -15,7 +14,7 @@ User = get_user_model()
 def index(request):
     """View - функция для главной страницы проекта."""
 
-    posts = Post.objects.all()
+    posts = Post.objects.all().select_related("group")
     paginator = Paginator(posts, settings.PAGINATOR)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -136,7 +135,7 @@ def add_comment(request, post_id):
 def follow_index(request):
     """View - функция для главной страницы подписок."""
 
-    posts = Post.objects.filter(author__following__user=request.user).all()
+    posts = Post.objects.filter(author__following__user=request.user)
     paginator = Paginator(posts, settings.PAGINATOR)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -152,12 +151,7 @@ def profile_follow(request, username):
     if request.user.username == username:
         return redirect('posts:profile', username=username)
     author_follow = get_object_or_404(User, username=username)
-    follows = Follow.objects.filter(
-        user=request.user,
-        author=author_follow
-    ).exists()
-    if not follows:
-        Follow.objects.create(user=request.user, author=author_follow)
+    Follow.objects.get_or_create(user=request.user, author=author_follow)
     return redirect('posts:profile', username=username)
 
 
@@ -168,6 +162,5 @@ def profile_unfollow(request, username):
     author = get_object_or_404(User, username=username)
     follow = Follow.objects.get(author=author,
                                 user=request.user)
-    if Follow.objects.filter(pk=follow.pk).exists():
-        follow.delete()
+    follow.delete()
     return redirect('posts:profile', username=username)
