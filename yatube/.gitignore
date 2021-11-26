@@ -1,10 +1,10 @@
-.static
-/static
+#.static
+#/static
 .vscode
-/static
+#/static
 htmlcov/
 .coverage
 .coverage.*
 coverage.xml
 *.cover
-/media
+#/media
